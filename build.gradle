@@ -11,6 +11,10 @@ jmix {
     bomVersion = '2.2.3'
     projectId = 'yel'
 }
+
+task herokuBuild(type: Exec) {
+    commandLine './gradlew', '-Pvaadin.productionMode=true', 'bootJar'
+}
 bootRun {
     systemProperties System.properties
     args = ["-Pvaadin.productionMode=true"]
