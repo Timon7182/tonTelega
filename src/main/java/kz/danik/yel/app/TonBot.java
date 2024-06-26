@@ -89,7 +89,7 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
                 sentToPay(callbackQuery, callBackValue, text, lang, true, telegramUserTask);
 
             } else if(platform.equals(Platform.INSTAGRAM)){
-                Boolean isToPay= false;
+                Boolean isToPay= true;
 
                 String text = "TO_PAY";
 
@@ -111,8 +111,7 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
         telegramClient.execute(request);
 
         if(isToPay){
-            telegramUserTask.setStatus(TaskStatus.TO_PAY);
-            core_DataManager.save(telegramUserTask);
+            telegramTaskService.changeStatus(telegramUserTask,TaskStatus.TO_PAY);
 
             EditMessageText newMessage = new EditMessageText(((Message) callbackQuery.getMessage()).getText()
                     + String.format(" (%s) ",getMessage("DONE", lang)));
@@ -214,7 +213,7 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
                     telegramTask.getPrize(),telegramTask.getCurrency());
             SendMessage request = new SendMessage(String.valueOf(chatId),text);
 
-            if(telegramTask.getType().equals(TaskType.FOLLOW)){
+            if(telegramTask.getType().equals(TaskType.FOLLOW) || telegramTask.getType().equals(TaskType.LINK)){
                 InlineKeyboardButton followButton = new InlineKeyboardButton(getMessage("ACCOMPLISH", user.getLanguageCode()));
                 followButton.setUrl(telegramTask.getTaskUrl());
 

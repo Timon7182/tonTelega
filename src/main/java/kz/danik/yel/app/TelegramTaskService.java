@@ -3,6 +3,7 @@ package kz.danik.yel.app;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.security.Authenticated;
+import kz.danik.yel.entity.TaskStatus;
 import kz.danik.yel.entity.TelegramTask;
 import kz.danik.yel.entity.TelegramUserTask;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class TelegramTaskService {
                 .query("select e from yel_TelegramTask e")
                .fetchPlan(FetchPlan.BASE)
                .list();
+    }
+    @Authenticated
+    void changeStatus(TelegramUserTask userTask,TaskStatus status){
+        userTask.setStatus(status);
+        dataManager.save(userTask);
     }
 
     @Authenticated
