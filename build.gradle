@@ -14,7 +14,7 @@ jmix {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'kzd.danik.yel.YelApplication'  // Replace with your actual main class
+                'Main-Class': 'kz.danik.yel.YelApplication'  // Replace with your actual main class
         )
     }
 }
