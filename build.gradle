@@ -11,6 +11,16 @@ jmix {
     bomVersion = '2.2.3'
     projectId = 'yel'
 }
+task stage(dependsOn: ['clean', 'bootJar']) {
+    doLast {
+        exec {
+            commandLine './gradlew', '-Pvaadin.productionMode=true', 'bootJar'
+        }
+    }
+}
+
+bootJar.mustRunAfter clean
+
 
 task herokuBuild(type: Exec) {
     commandLine './gradlew', '-Pvaadin.productionMode=true', 'bootJar'
