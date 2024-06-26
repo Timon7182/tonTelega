@@ -11,6 +11,11 @@ jmix {
     bomVersion = '2.2.3'
     projectId = 'yel'
 }
+bootRun {
+    systemProperties System.properties
+    args = ["-Pvaadin.productionMode=true"]
+}
+
 jar {
     manifest {
         attributes(
