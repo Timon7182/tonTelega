@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://telegramUserTaskListView.title"
+      focusComponent="telegramUserTasksDataGrid">
+    <data>
+        <collection id="telegramUserTasksDc"
+                    class="kz.danik.yel.entity.TelegramUserTask">
+            <fetchPlan extends="_base">
+                <property name="user" fetchPlan="_base"/>
+                <property name="task" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="telegramUserTasksDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from yel_TelegramUserTask e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="telegramUserTasksDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createBtn" action="telegramUserTasksDataGrid.create"/>
+            <button id="editBtn" action="telegramUserTasksDataGrid.edit"/>
+            <button id="removeBtn" action="telegramUserTasksDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="telegramUserTasksDl"/>
+        </hbox>
+        <dataGrid id="telegramUserTasksDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="telegramUserTasksDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="user"/>
+                <column property="status"/>
+                <column property="task"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectBtn" action="selectAction"/>
+            <button id="discardBtn" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

@@ -1,0 +1,56 @@
+{
+  "package-name": "kz.danik.yel.app.bot.model",
+  "java-types": {
+    "java-type": [
+      {
+        "name": "kz.danik.yel.app.bot.model.GraphQlResponse",
+        "xml-root-element": {
+          "name": "data"
+        },
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "payload","type": "kz.danik.yel.app.bot.model.PageObject","xml-path": "shortcode_media/edge_liked_by"}
+          ]
+        }
+      },
+      {
+        "name": "kz.danik.yel.app.bot.model.Account",
+        "xml-root-element": {
+          "name": "user"
+        },
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "username","type": "java.lang.String","xml-path": "username/text()"},
+            {"java-attribute": "fullName","type": "java.lang.String","xml-path": "full_name/text()"},
+            {"java-attribute": "profilePicUrl","type": "java.lang.String","xml-path": "profile_pic_url/text()"},
+            {"java-attribute": "isVerified","type": "java.lang.Boolean","xml-path": "is_verified/text()"},
+            {"java-attribute": "followedByViewer","type": "java.lang.Boolean","xml-path": "followed_by_viewer/text()"},
+            {"java-attribute": "requestedByViewer","type": "java.lang.Boolean","xml-path": "requested_by_viewer/text()"}
+          ]
+        }
+      },
+      {
+        "name": "kz.danik.yel.app.bot.model.PageObject",
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "count","type": "java.lang.Integer","xml-path": "count/text()"},
+            {"java-attribute": "pageInfo","type": "kz.danik.yel.app.bot.model.PageInfo","xml-path": "page_info"},
+            {"java-attribute": "nodes","type": "kz.danik.yel.app.bot.model.Account","xml-path": "edges/node"}
+          ]
+        }
+      },
+      {
+        "name": "kz.danik.yel.app.bot.model.PageInfo",
+        "xml-root-element": {
+          "name": "page_info"
+        },
+        "java-attributes": {
+          "xml-attribute": [
+            {"java-attribute": "hasNextPage","type": "java.lang.Boolean","xml-path": "has_next_page/text()"},
+            {"java-attribute": "endCursor","type": "java.lang.String","xml-path": "end_cursor/text()"}
+          ]
+        }
+      }
+    ]
+  }
+}

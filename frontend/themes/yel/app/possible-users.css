@@ -1,0 +1,35 @@
+.possible-users {
+    /*width: 100%;*/
+}
+
+.possible-users td {
+    border-radius: var(--lumo-border-radius-s);
+    padding: var(--lumo-space-s);
+}
+
+.possible-role {
+    width: 60%;
+}
+
+.possible-user-password::before {
+    font-family: Vaadin-Icons;
+    content: '\e7f2';
+    padding-inline-end: var(--lumo-space-s);
+}
+
+.possible-user::before {
+    font-family: Vaadin-Icons;
+    content: '\e80d';
+    padding-inline-end: var(--lumo-space-s);
+}
+
+.possible-role::before {
+    font-family: Vaadin-Icons;
+    content: '\e747';
+    padding-inline-end: var(--lumo-space-s);
+}
+
+.possible-users td ul {
+    margin-block-start: 0.1em;
+    margin-block-end: 0.1em;
+}

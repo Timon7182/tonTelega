@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/flowui/menu">
+
+    <menu id="application" title="msg://kz.danik.yel/menu.application.title" opened="true">
+        <item view="yel_TelegramTask.list" title="msg://kz.danik.yel.view.telegramtask/telegramTaskListView.title"/>
+        <item view="yel_TelegramUser.list" title="msg://kz.danik.yel.view.telegramuser/telegramUserListView.title"/>
+        <item view="yel_TelegramUserTask.list"
+              title="msg://kz.danik.yel.view.telegramusertask/telegramUserTaskListView.title"/>
+        <item view="yel_Settings.list" title="msg://kz.danik.yel.view.settings/settingsListView.title"/>
+    </menu>
+
+</menu-config>

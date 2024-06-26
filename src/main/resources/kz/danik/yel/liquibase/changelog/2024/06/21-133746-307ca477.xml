@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="yel">
+        <addColumn tableName="YEL_TELEGRAM_USER">
+            <column name="CHAT_ID" type="DECIMAL(19)"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="CHAT_ID" tableName="YEL_TELEGRAM_USER"/>
+    </changeSet>
+    <changeSet id="2" author="yel">
+        <addColumn tableName="YEL_TELEGRAM_USER">
+            <column name="STATE" type="INT"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="STATE" defaultNullValue="0" tableName="YEL_TELEGRAM_USER"/>
+    </changeSet>
+    <changeSet id="3" author="yel">
+        <addColumn tableName="YEL_TELEGRAM_USER">
+            <column name="USERID" type="DECIMAL(19)"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="USERID" tableName="YEL_TELEGRAM_USER"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://telegramUserListView.title"
+      focusComponent="telegramUsersDataGrid">
+    <data>
+        <collection id="telegramUsersDc"
+                    class="kz.danik.yel.entity.TelegramUser">
+            <fetchPlan extends="_base"/>
+            <loader id="telegramUsersDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from yel_TelegramUser e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="telegramUsersDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createBtn" action="telegramUsersDataGrid.create"/>
+            <button id="editBtn" action="telegramUsersDataGrid.edit"/>
+            <button id="removeBtn" action="telegramUsersDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="telegramUsersDl"/>
+        </hbox>
+        <dataGrid id="telegramUsersDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="telegramUsersDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="instagram"/>
+                <column property="username"/>
+                <column property="firstName"/>
+                <column property="lastName"/>
+                <column property="userid"/>
+                <column property="chatId"/>
+                <column property="state"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectBtn" action="selectAction"/>
+            <button id="discardBtn" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

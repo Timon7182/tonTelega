@@ -1,0 +1,90 @@
+plugins {
+    id 'io.jmix' version '2.2.3'
+    id 'java'
+    id "com.microsoft.azure.azurewebapp" version "1.2.0"
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.vaadin'
+
+jmix {
+    bomVersion = '2.2.3'
+    projectId = 'yel'
+}
+
+group = 'kz.danik'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://global.repo.jmix.io/repository/public'
+    }
+}
+
+azurewebapp {
+    subscription = '05bca979-dd11-4b52-abc8-e2b97595f01e'
+    resourceGroup = 'yelGroup'
+    appServicePlanName = 'yelPlan'
+    appName = 'tontelegramyel'
+    pricingTier = 'B3'
+    region = 'westeurope'
+    runtime {
+        os = 'Linux'
+        webContainer = 'Java SE'
+        javaVersion = 'Java 17'
+    }
+    appSettings {
+        put('main.datasource.url', 'jdbc:postgresql://yelbot.postgres.database.azure.com:5432/postgres')
+        put('main.datasource.username', 'jmixadmin@yelbot')
+        put('main.datasource.password', 'ChangeMe@42')
+    }
+}
+dependencies {
+    implementation 'io.jmix.core:jmix-core-starter'
+    implementation 'io.jmix.data:jmix-eclipselink-starter'
+    implementation 'io.jmix.security:jmix-security-starter'
+    implementation 'io.jmix.security:jmix-security-flowui-starter'
+    implementation 'io.jmix.security:jmix-security-data-starter'
+    implementation 'io.jmix.localfs:jmix-localfs-starter'
+    implementation 'io.jmix.flowui:jmix-flowui-starter'
+    implementation 'io.jmix.flowui:jmix-flowui-data-starter'
+    implementation 'io.jmix.flowui:jmix-flowui-themes'
+    implementation 'io.jmix.datatools:jmix-datatools-starter'
+    implementation 'io.jmix.datatools:jmix-datatools-flowui-starter'
+    implementation 'org.telegram:telegrambots-longpolling:7.4.0'
+    implementation 'org.telegram:telegrambots-client:7.4.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.eclipse.persistence:org.eclipse.persistence.core:3.0.0'
+    implementation 'org.eclipse.persistence:org.eclipse.persistence.moxy:3.0.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+    implementation 'com.google.api-client:google-api-client:1.33.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.33.0'
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.41.5'
+
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'io.jmix.flowui:jmix-flowui-test-assist'
+    implementation 'org.postgresql:postgresql'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+vaadin {
+    optimizeBundle = false
+}

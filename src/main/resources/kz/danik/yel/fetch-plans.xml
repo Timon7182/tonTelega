@@ -1,0 +1,14 @@
+<fetchPlans xmlns="http://jmix.io/schema/core/fetch-plans">
+    <fetchPlan entity="yel_TelegramUser" name="telegramUser-full-fetch-plan" extends="_base">
+        <property name="tasks" fetchPlan="_base">
+            <property name="task" fetchPlan="_base"/>
+        </property>
+    </fetchPlan>
+    <fetchPlan entity="yel_TelegramUserTask" name="telegramUserTask-withTask-fetch-plan" extends="_base">
+        <property name="task" fetchPlan="_base"/>
+        <property name="user" fetchPlan="_instance_name">
+            <property name="instagram"/>
+            <property name="chatId"/>
+        </property>
+    </fetchPlan>
+</fetchPlans>

@@ -1,0 +1,36 @@
+{
+  "package-name": "kz.danik.yel.app.bot.model",
+  "java-types": {
+    "java-type": [
+      {
+        "name": "kz.danik.yel.app.bot.model.Comment",
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "id","type": "java.lang.Long","xml-path": "id/text()"},
+            {"java-attribute": "createdAt","type": "java.lang.Long","xml-path": "created_time/text()"},
+            {"java-attribute": "owner","type": "kz.danik.yel.app.bot.model.Account","xml-path": "from"}
+          ]
+        }
+      },
+      {
+        "name": "kz.danik.yel.app.bot.model.Account",
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "username","type": "java.lang.String","xml-path": "username/text()"},
+            {"java-attribute": "fullName","type": "java.lang.String","xml-path": "full_name/text()"},
+            {"java-attribute": "profilePicUrl","type": "java.lang.String","xml-path": "profile_picture/text()"}
+          ]
+        }
+      },
+      {
+        "name": "kz.danik.yel.app.bot.model.ActionResponse",
+        "java-attributes": {
+          "xml-element": [
+            {"java-attribute": "status","type": "java.lang.String","xml-path": "status/text()"},
+            {"java-attribute": "payload","type": "kz.danik.yel.app.bot.model.Comment","xml-path": "."}
+          ]
+        }
+      }
+    ]
+  }
+}
