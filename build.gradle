@@ -11,6 +11,14 @@ jmix {
     bomVersion = '2.2.3'
     projectId = 'yel'
 }
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'kz.danik.yel.YelApplication'  // Replace with your actual main class
+        )
+    }
+}
+
 
 group = 'kz.danik'
 version = '0.0.1-SNAPSHOT-plain'
