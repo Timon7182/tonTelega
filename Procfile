@@ -1,0 +1,1 @@
+ web: java -jar target/yel-0.0.1-SNAPSHOT-plain.jar
