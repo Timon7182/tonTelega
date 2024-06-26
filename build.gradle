@@ -15,6 +15,13 @@ bootRun {
     systemProperties System.properties
     args = ["-Pvaadin.productionMode=true"]
 }
+ext {
+    vaadinProductionMode = project.hasProperty('vaadin.productionMode') ? project.property('vaadin.productionMode') : 'false'
+}
+
+vaadin {
+    productionMode = vaadinProductionMode.toBoolean()
+}
 
 jar {
     manifest {
