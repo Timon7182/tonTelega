@@ -4,6 +4,7 @@ import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.SaveContext;
 import io.jmix.core.security.Authenticated;
+import kz.danik.yel.entity.TaskStatus;
 import kz.danik.yel.entity.TelegramTask;
 import kz.danik.yel.entity.TelegramUser;
 import kz.danik.yel.entity.TelegramUserTask;
@@ -60,6 +61,7 @@ public class TelegramUserService {
                 TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
                 telegramUserTask.setUser(telegramUser);
                 telegramUserTask.setTask(task);
+                telegramUserTask.setStatus(TaskStatus.IN_PROGRESS);
                 telegramUserTask.setToNotify(false);
                 saveContext.saving(telegramUserTask);
                 telegramUserTasks.add(telegramUserTask);

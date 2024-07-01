@@ -5,14 +5,15 @@ import io.jmix.core.metamodel.datatype.EnumClass;
 import org.springframework.lang.Nullable;
 
 
-public enum TaskStatus implements EnumClass<String> {
+public enum PaymentStatus implements EnumClass<String> {
 
-    IN_PROGRESS("IN_PROGRESS"),
-    DONE("DONE");
+    FREE("FREE"),
+    PAID("PAID"),
+    TO_PAY("TO_PAY");
 
     private final String id;
 
-    TaskStatus(String id) {
+    PaymentStatus(String id) {
         this.id = id;
     }
 
@@ -21,8 +22,8 @@ public enum TaskStatus implements EnumClass<String> {
     }
 
     @Nullable
-    public static TaskStatus fromId(String id) {
-        for (TaskStatus at : TaskStatus.values()) {
+    public static PaymentStatus fromId(String id) {
+        for (PaymentStatus at : PaymentStatus.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

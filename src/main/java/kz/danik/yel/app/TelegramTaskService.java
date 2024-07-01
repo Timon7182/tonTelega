@@ -3,6 +3,7 @@ package kz.danik.yel.app;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.security.Authenticated;
+import kz.danik.yel.entity.PaymentStatus;
 import kz.danik.yel.entity.TaskStatus;
 import kz.danik.yel.entity.TelegramTask;
 import kz.danik.yel.entity.TelegramUserTask;
@@ -26,9 +27,28 @@ public class TelegramTaskService {
                .fetchPlan(FetchPlan.BASE)
                .list();
     }
+
     @Authenticated
-    void changeStatus(TelegramUserTask userTask,TaskStatus status){
+    List<TelegramUserTask> getActiveTelegramUserTasks(){
+        return dataManager.load(TelegramUserTask.class)
+                .query("select e from yel_TelegramUserTask e")
+                .fetchPlan("telegramUserTask-withTask-fetch-plan")
+                .list();
+    }
+
+    @Authenticated
+    List<TelegramUserTask> getActiveTelegramUserTasksByPaymentStatus(PaymentStatus paymentStatus){
+        return dataManager.load(TelegramUserTask.class)
+                .query("select e from yel_TelegramUserTask e where e.paymentStatus =:paymentStatus")
+                .parameter("paymentStatus",paymentStatus.getId())
+                .fetchPlan("telegramUserTask-withTask-fetch-plan")
+                .list();
+    }
+
+    @Authenticated
+    void changeStatus(TelegramUserTask userTask,TaskStatus status,PaymentStatus paymentStatus){
         userTask.setStatus(status);
+        userTask.setPaymentStatus(paymentStatus);
         dataManager.save(userTask);
     }
 

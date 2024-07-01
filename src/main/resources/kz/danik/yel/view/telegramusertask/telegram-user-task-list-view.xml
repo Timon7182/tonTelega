@@ -37,22 +37,35 @@
             <button id="createBtn" action="telegramUserTasksDataGrid.create"/>
             <button id="editBtn" action="telegramUserTasksDataGrid.edit"/>
             <button id="removeBtn" action="telegramUserTasksDataGrid.remove"/>
+            <button id="bulkEditBtn" action="telegramUserTasksDataGrid.bulkEdit"/>
             <simplePagination id="pagination" dataLoader="telegramUserTasksDl"/>
         </hbox>
         <dataGrid id="telegramUserTasksDataGrid"
                   width="100%"
                   minHeight="20em"
                   dataContainer="telegramUserTasksDc"
-                  columnReorderingAllowed="true">
+                  columnReorderingAllowed="true" selectionMode="MULTI">
             <actions>
                 <action id="create" type="list_create"/>
+                <action id="bulkEdit" type="bulked_edit" >
+                    <properties>
+                        <property name="includeProperties" value="status,paymentStatus"/>
+                    </properties>
+                </action>
                 <action id="edit" type="list_edit"/>
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="user"/>
+                <column key="numeration" />
+                <column property="createdDate"/>
+                <column property="lastModifiedDate"/>
+                <column property="user.username"/>
+                <column property="user.userid"/>
                 <column property="status"/>
+                <column property="paymentStatus"/>
                 <column property="task"/>
+                <column property="task.prize"/>
+                <column property="task.currency"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

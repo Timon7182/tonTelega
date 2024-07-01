@@ -4,7 +4,6 @@ import kz.danik.yel.YelApplication;
 import kz.danik.yel.entity.User;
 import kz.danik.yel.view.user.UserDetailView;
 import kz.danik.yel.view.user.UserListView;
-import com.vaadin.flow.component.Component;
 import io.jmix.core.DataManager;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.grid.DataGrid;

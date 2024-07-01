@@ -29,7 +29,7 @@ public class InstagramService {
 
     @Authenticated
     public String checkTaskForComplete(TelegramUserTask telegramUserTask) throws Exception {
-        if(telegramUserTask.getStatus().equals(TaskStatus.TO_PAY)){
+        if(telegramUserTask.getStatus().equals(TaskStatus.DONE)){
             return "TO_PAY";
         }
         TelegramTask task =telegramUserTask.getTask();

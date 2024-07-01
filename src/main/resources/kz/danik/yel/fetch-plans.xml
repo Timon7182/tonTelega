@@ -6,7 +6,7 @@
     </fetchPlan>
     <fetchPlan entity="yel_TelegramUserTask" name="telegramUserTask-withTask-fetch-plan" extends="_base">
         <property name="task" fetchPlan="_base"/>
-        <property name="user" fetchPlan="_instance_name">
+        <property name="user" fetchPlan="_base">
             <property name="instagram"/>
             <property name="chatId"/>
         </property>

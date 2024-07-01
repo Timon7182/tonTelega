@@ -3,6 +3,7 @@ package kz.danik.yel.listener;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.impl.DataManagerImpl;
 import kz.danik.yel.app.TonBot;
+import kz.danik.yel.entity.PaymentStatus;
 import kz.danik.yel.entity.TaskStatus;
 import kz.danik.yel.entity.TelegramUser;
 import kz.danik.yel.entity.TelegramUserTask;
@@ -25,14 +26,14 @@ public class TelegramUserTaskEventListener {
 
     @TransactionalEventListener
     public void onTelegramUserTaskChangedAfterCommit(final EntityChangedEvent<TelegramUserTask> event) throws TelegramApiException {
-        if(event.getType().equals(EntityChangedEvent.Type.UPDATED) && event.getChanges().isChanged("status")){
+        if(event.getType().equals(EntityChangedEvent.Type.UPDATED) && event.getChanges().isChanged("paymentStatus")){
             TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
                     .id(event.getEntityId().getValue())
                     .joinTransaction(false)
                     .fetchPlan("telegramUserTask-withTask-fetch-plan")
                     .one();
 
-            if(telegramUserTask.getStatus().equals(TaskStatus.TO_PAY)){
+            if(telegramUserTask.getPaymentStatus() != null && telegramUserTask.getPaymentStatus().equals(PaymentStatus.TO_PAY)){
                 sendNotificationToAdminsToPay(telegramUserTask);
             }
         }
@@ -68,7 +69,7 @@ public class TelegramUserTaskEventListener {
 
         for (TelegramUser telegramUser : telegramUserList) {
             TonBot.sendMessageToChat(String.valueOf(telegramUser.getChatId().longValue()),
-                    String.format("Нужно выплатить приз: %s, %s. Задание: %s",telegramUserTask.getUser().getUsername(),
+                    String.format("Нужно выплатить приз: %s, %s. Задание: %s","@"+telegramUserTask.getUser().getUsername(),
                             telegramUserTask.getTask().getPrize(),
                             telegramUserTask.getTask().getTaskName()));
         }

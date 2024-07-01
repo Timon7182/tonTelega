@@ -31,7 +31,7 @@
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createBtn" action="telegramUsersDataGrid.create"/>
+            <button id="createBtn" action="telegramUsersDataGrid.create" enabled="false"/>
             <button id="editBtn" action="telegramUsersDataGrid.edit"/>
             <button id="removeBtn" action="telegramUsersDataGrid.remove"/>
             <simplePagination id="pagination" dataLoader="telegramUsersDl"/>
@@ -40,20 +40,18 @@
                   width="100%"
                   minHeight="20em"
                   dataContainer="telegramUsersDc"
-                  columnReorderingAllowed="true">
+                  columnReorderingAllowed="true" selectionMode="MULTI">
             <actions>
                 <action id="create" type="list_create"/>
                 <action id="edit" type="list_edit"/>
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="instagram"/>
+                <column property="createdDate"/>
                 <column property="username"/>
                 <column property="firstName"/>
                 <column property="lastName"/>
                 <column property="userid"/>
-                <column property="chatId"/>
-                <column property="state"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

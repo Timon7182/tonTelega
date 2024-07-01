@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,9 +21,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Component("yel_TonBot")
@@ -69,55 +70,57 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
     protected void handleCallback(CallbackQuery callbackQuery) throws Exception {
         String[] callBackValue = callbackQuery.getData().split(":");
-        boolean  isUUID = isUUID(callBackValue[0]);
-        if(isUUID){
-
-            String lang = callbackQuery.getFrom().getLanguageCode();
-            sentWaitText(callBackValue,lang);
-
-            TelegramUserTask telegramUserTask = telegramTaskService
-                    .getUserTaskById(UUID.fromString(callBackValue[0]));
-
-            if(telegramUserTask == null){
-                return;
-            }
-            Platform platform = telegramUserTask.getTask().getPlatform();
-
-            if(platform == null){
-
-                String text = "TO_PAY";
-                sentToPay(callbackQuery, callBackValue, text, lang, true, telegramUserTask);
-
-            } else if(platform.equals(Platform.INSTAGRAM)){
-                Boolean isToPay= true;
-
-                String text = "TO_PAY";
-
-                if(toCheck(Platform.INSTAGRAM.getId())){
-                    text = instagramService.checkTaskForComplete(telegramUserTask);
-                }
-                if(text.contains("TO_PAY"))
-                    isToPay=true;
-
-                sentToPay(callbackQuery, callBackValue, text, lang, isToPay, telegramUserTask);
-            }
-
-
+        if (!isUUID(callBackValue[0])) {
+            return;
         }
+
+        String lang = callbackQuery.getFrom().getLanguageCode();
+        sentWaitText(callBackValue, lang);
+
+        UUID taskId = UUID.fromString(callBackValue[0]);
+        TelegramUserTask telegramUserTask = telegramTaskService.getUserTaskById(taskId);
+
+        if (telegramUserTask == null) {
+            return;
+        }
+
+        if (!Boolean.TRUE.equals(telegramUserTask.getTask().getIsActive())) {
+            sendMessage(getMessage("taskIsNotActive", lang), callbackQuery.getMessage().getChatId());
+            return;
+        }
+
+        Platform platform = telegramUserTask.getTask().getPlatform();
+        String text = "TO_PAY";
+        boolean isToPay = true;
+
+        if (platform != null && platform.equals(Platform.INSTAGRAM)) {
+            if (toCheck(Platform.INSTAGRAM.getId())) {
+                text = instagramService.checkTaskForComplete(telegramUserTask);
+            }
+            isToPay = text.contains("TO_PAY");
+        }
+
+        sentToPay(callbackQuery, callBackValue, text, lang, isToPay, telegramUserTask);
     }
 
-    private void sentToPay(CallbackQuery callbackQuery, String[] callBackValue, String text, String lang, Boolean isToPay, TelegramUserTask telegramUserTask) throws TelegramApiException {
+
+    private void sentToPay(CallbackQuery callbackQuery, String[] callBackValue,
+                           String text,
+                           String lang, Boolean isToPay,
+                           TelegramUserTask telegramUserTask) throws TelegramApiException {
         SendMessage request = new SendMessage(String.valueOf(callBackValue[1]), getMessage(text, lang));
         telegramClient.execute(request);
 
         if(isToPay){
-            telegramTaskService.changeStatus(telegramUserTask,TaskStatus.TO_PAY);
+            telegramTaskService.changeStatus(telegramUserTask,TaskStatus.DONE,PaymentStatus.TO_PAY);
 
-            EditMessageText newMessage = new EditMessageText(((Message) callbackQuery.getMessage()).getText()
-                    + String.format(" (%s) ",getMessage("DONE", lang)));
-            newMessage.setChatId(callbackQuery.getMessage().getChatId());
-            newMessage.setMessageId(callbackQuery.getMessage().getMessageId());
-            telegramClient.execute(newMessage);
+
+            int msgId = ((Message) callbackQuery.getMessage()).getMessageId();
+
+            DeleteMessage deleteMessage = new DeleteMessage(
+                    String.valueOf(callbackQuery.getMessage().getChatId())
+                    ,msgId);
+            telegramClient.execute(deleteMessage);
         }
     }
 
@@ -143,13 +146,25 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
         switch (text) {
             case "/start":
-                showStartMsg(chatId,message.getFrom());
+                showTasks(chatId,message.getFrom());
                 break;
             case "/help":
-                showBalance(chatId);
+                showHelpMessage(chatId,message.getFrom().getLanguageCode());
                 break;
             case "/tasks":
                 showTasks(chatId,message.getFrom());
+                break;
+            case "/done":
+                showDoneTasks(chatId,message.getFrom());
+                break;
+            case "/admin":
+                showAdminCmdList(chatId,message.getFrom());
+                break;
+            case "/admtasks":
+                showAdminTasks(chatId,message.getFrom());
+                break;
+            case "/needpay":
+                needPayShow(chatId,message.getFrom());
                 break;
             default:
                 handleInstagramUsername(chatId,message.getFrom().getId(), text,message.getFrom().getLanguageCode());
@@ -157,12 +172,100 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
         }
     }
 
-    private void showStartMsg(long chatId, User user) throws TelegramApiException {
-        telegramUserService.getOrCreateTelegramUserById(user,chatId);
+    protected void needPayShow(long chatId, User from) throws TelegramApiException {
 
-        String text = getMessage("start",user.getLanguageCode());
+        if(isAdmin(from,chatId).equals(Boolean.FALSE))
+            return;
 
-        SendMessage request = new SendMessage(String.valueOf(chatId),text);
+        List<TelegramUserTask> telegramUserTasks = telegramTaskService
+                .getActiveTelegramUserTasksByPaymentStatus(PaymentStatus.TO_PAY);
+
+        if(telegramUserTasks.isEmpty()){
+            sendMessage("Нет выплат",chatId);
+            return;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        Map<String, Double> currencyTotals = new HashMap<>();
+        int userCount = 0;
+
+        for (TelegramUserTask task : telegramUserTasks) {
+            String username = task.getUser().getUsername();
+            double prizeAmount = task.getTask().getPrize();
+            String currency = task.getTask().getCurrency();
+
+            result.append(String.format("@%s %.2f %s\n", username, prizeAmount, currency));
+
+            currencyTotals.put(currency, currencyTotals.getOrDefault(currency, 0.0) + prizeAmount);
+        }
+
+        result.append("\nОбщие данные:\n");
+        for (Map.Entry<String, Double> entry : currencyTotals.entrySet()) {
+            result.append(String.format("В общем %s: %.2f\n", entry.getKey(), entry.getValue()));
+        }
+
+
+        String finalResult = result.toString();
+
+        sendMessage(finalResult,chatId);
+    }
+
+    private void showAdminCmdList(long chatId, User from) throws TelegramApiException {
+        if(isAdmin(from,chatId).equals(Boolean.FALSE))
+            return;
+        String cmds ="/admtasks - Статистика задач\n" +
+                " /needpay - Список кому нужно оплатить";
+
+        sendMessage(cmds,chatId);
+    }
+
+    private Boolean isAdmin(User user,long chatId){
+        TelegramUser telegramUser = telegramUserService.getOrCreateTelegramUserById(user,chatId);
+        return telegramUser.getIsAdmin();
+    }
+
+    private void showAdminTasks(long chatId, User from) throws TelegramApiException {
+
+        if(isAdmin(from,chatId).equals(Boolean.FALSE))
+            return;
+
+        List<TelegramUserTask> telegramUserTasks = telegramTaskService.getActiveTelegramUserTasks();
+        String lang = from.getLanguageCode();
+
+        if(telegramUserTasks.isEmpty()){
+            sendMessage(getMessage("noTasksAdmin",lang),chatId);
+            return;
+        }
+
+        List<TelegramUserTask> doneTasks = telegramUserTasks.stream()
+                .filter(e->e.getStatus().equals(TaskStatus.DONE))
+                .collect(Collectors.toList());
+
+        int all = telegramUserTasks.size();
+        int done = doneTasks.size();
+
+        String needToPay = getCountFromTaskList(doneTasks,PaymentStatus.TO_PAY);
+        String paidCount = getCountFromTaskList(doneTasks,PaymentStatus.PAID);
+
+        String doneMsgTemplate = getMessage("doneAdm",lang);
+        String doneMsg = doneMsgTemplate
+                .replace("${needToPay}", needToPay)
+                .replace("${paidCount}", paidCount)
+                .replace("${done}", String.valueOf(done))
+                .replace("${all}", String.valueOf(all));
+
+        sendMessage(doneMsg,chatId);
+
+
+    }
+
+    protected void showHelpMessage(long chatId,String lang) throws TelegramApiException {
+        sendMessage(getMessage("help",lang),chatId);
+    }
+
+    protected void sendMessage(String message,long chatId) throws TelegramApiException {
+        SendMessage request = new SendMessage(String.valueOf(chatId),message);
         telegramClient.execute(request);
     }
 
@@ -178,16 +281,62 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
         }
     }
 
-    protected void showBalance(long chatId) throws TelegramApiException {
-        SendMessage request = new SendMessage(String.valueOf(chatId), "Your balance is: [balance]");
-        telegramClient.execute(request);
+
+
+    protected void showDoneTasks(long chatId, User from) throws TelegramApiException {
+
+        List<TelegramUserTask> telegramTasks = telegramUserService
+                .getOrCreateTelegramTasksByUserId(from,chatId);
+        String lang = from.getLanguageCode();
+
+        if(telegramTasks.isEmpty()){
+            sendMessage(getMessage("noTasks",lang),chatId);
+            return;
+        }
+        List<TelegramUserTask> doneTasks = telegramTasks.stream()
+                .filter(e->e.getStatus().equals(TaskStatus.DONE))
+                .collect(Collectors.toList());
+
+        int all = telegramTasks.size();
+        int done = doneTasks.size();
+
+        String needToPay = getCountFromTaskList(doneTasks,PaymentStatus.TO_PAY);
+        String paidCount = getCountFromTaskList(doneTasks,PaymentStatus.PAID);
+
+        String doneMsgTemplate = getMessage("done",lang);
+        String doneMsg = doneMsgTemplate
+                .replace("${needToPay}", needToPay)
+                .replace("${paidCount}", paidCount)
+                .replace("${done}", String.valueOf(done))
+                .replace("${all}", String.valueOf(all));
+
+        sendMessage(doneMsg,chatId);
+
+    }
+
+    private String getCountFromTaskList(List<TelegramUserTask> doneTasks, PaymentStatus paymentStatus) {
+        if(doneTasks.isEmpty())
+            return " 0";
+
+        Map<String, Double> prizeSummary = doneTasks.stream()
+                .filter(e->e.getPaymentStatus() != null  && e.getPaymentStatus().equals(paymentStatus))
+                .collect(Collectors.groupingBy(e -> e.getTask().getCurrency(),
+                        Collectors.summingDouble(e -> e.getTask().getPrize())));
+
+        String result = prizeSummary.entrySet().stream()
+                .map(entry -> entry.getValue() + " " + entry.getKey())
+                .collect(Collectors.joining(", "));
+
+        return result;
     }
 
     protected void showTasks(long chatId,User user) throws TelegramApiException {
+        telegramUserService.getOrCreateTelegramUserById(user,chatId);
+
         List<TelegramUserTask> telegramTasks = telegramUserService
                 .getOrCreateTelegramTasksByUserId(user,chatId)
                 .stream()
-                .filter(e->e.getStatus().equals(TaskStatus.IN_PROGRESS)
+                .filter(e->!e.getStatus().equals(TaskStatus.DONE)
                         && e.getTask().getIsActive().equals(Boolean.TRUE))
                 .toList();
 
@@ -216,6 +365,8 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
             if(telegramTask.getType().equals(TaskType.FOLLOW) || telegramTask.getType().equals(TaskType.LINK)){
                 InlineKeyboardButton followButton = new InlineKeyboardButton(getMessage("ACCOMPLISH", user.getLanguageCode()));
                 followButton.setUrl(telegramTask.getTaskUrl());
+
+
 
                 List<InlineKeyboardRow> keyboardRows = new ArrayList<>();
                 InlineKeyboardRow inlineKeyboardRow = new InlineKeyboardRow();

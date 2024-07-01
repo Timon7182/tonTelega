@@ -40,7 +40,8 @@
                   width="100%"
                   minHeight="20em"
                   dataContainer="telegramTasksDc"
-                  columnReorderingAllowed="true">
+                  columnReorderingAllowed="true"
+                  selectionMode="MULTI">
             <actions>
                 <action id="create" type="list_create"/>
                 <action id="edit" type="list_edit"/>

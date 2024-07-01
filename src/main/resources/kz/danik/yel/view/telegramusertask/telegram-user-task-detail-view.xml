@@ -21,14 +21,14 @@
     </actions>
     <layout>
         <formLayout id="form" dataContainer="telegramUserTaskDc">
-            <entityPicker id="userField" property="user">
+            <select id="statusField" property="status"/>
+            <entityPicker id="userField" property="user" enabled="false">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <select id="statusField" property="status"/>
-            <entityPicker id="taskField" property="task">
+            <entityPicker id="taskField" property="task" enabled="false">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
