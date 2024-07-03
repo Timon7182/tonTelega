@@ -48,7 +48,7 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
 
     public  void initBot(){
-        telegramClient = new OkHttpTelegramClient("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8");
+        telegramClient = new OkHttpTelegramClient("7390627968:AAHhrjWDt2Itr7af6JegVfZF2gtxdVFUILE");
     }
     @Override
     public void consume(Update update) {
