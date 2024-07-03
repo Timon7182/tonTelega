@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
+import org.telegram.telegrambots.meta.api.methods.description.SetMyDescription;
+import org.telegram.telegrambots.meta.api.methods.name.SetMyName;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -166,10 +168,29 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
             case "/needpay":
                 needPayShow(chatId,message.getFrom());
                 break;
+            case "/refresh":
+                refreshValues(chatId,message.getFrom());
+                break;
             default:
                 handleInstagramUsername(chatId,message.getFrom().getId(), text,message.getFrom().getLanguageCode());
                 break;
         }
+    }
+
+    private void refreshValues(long chatId, User from) throws TelegramApiException {
+        if (isAdmin(from,chatId).equals(Boolean.FALSE))
+            return;
+
+        SetMyDescription setMyDescriptionEn = new SetMyDescription();
+        setMyDescriptionEn.setDescription(getMessage("description","en"));
+        setMyDescriptionEn.setLanguageCode("en");
+
+        SetMyDescription setMyDescriptionRu = new SetMyDescription();
+        setMyDescriptionRu.setDescription(getMessage("description","ru"));
+        setMyDescriptionRu.setLanguageCode("ru");
+
+        telegramClient.execute(setMyDescriptionEn);
+        telegramClient.execute(setMyDescriptionRu);
     }
 
     private void showStart(long chatId, User from) throws TelegramApiException {

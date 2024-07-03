@@ -51,6 +51,7 @@ public class YelApplication implements AppShellConfigurator {
             try (TelegramBotsLongPollingApplication botsApplication = new TelegramBotsLongPollingApplication()) {
                 tonBot.initBot();
                 botsApplication.registerBot(botToken, tonBot);
+                
                 System.out.println("MyAmazingBot successfully started!");
                 // Ensure this process waits forever
                 Thread.currentThread().join();
