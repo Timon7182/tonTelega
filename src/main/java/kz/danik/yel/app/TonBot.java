@@ -146,7 +146,7 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
         switch (text) {
             case "/start":
-                showTasks(chatId,message.getFrom());
+                showStart(chatId,message.getFrom());
                 break;
             case "/help":
                 showHelpMessage(chatId,message.getFrom().getLanguageCode());
@@ -170,6 +170,12 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
                 handleInstagramUsername(chatId,message.getFrom().getId(), text,message.getFrom().getLanguageCode());
                 break;
         }
+    }
+
+    private void showStart(long chatId, User from) throws TelegramApiException {
+        TelegramUser telegramUser = telegramUserService.getOrCreateTelegramUserById(from,chatId);
+        String text = String.format(getMessage("/start",from.getLanguageCode()),telegramUser.getUsername());
+        sendMessage(text,chatId);
     }
 
     protected void needPayShow(long chatId, User from) throws TelegramApiException {
