@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.description.SetMyDescription;
-import org.telegram.telegrambots.meta.api.methods.name.SetMyName;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -50,6 +48,8 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
 
     public  void initBot(){
+//        telegramClient = new OkHttpTelegramClient("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8");
+
         telegramClient = new OkHttpTelegramClient("7390627968:AAHhrjWDt2Itr7af6JegVfZF2gtxdVFUILE");
     }
     @Override
@@ -300,6 +300,9 @@ public class TonBot implements LongPollingSingleThreadUpdateConsumer {
 
         Settings settings = settingsService.getSettingsByCode(code);
         lang = lang.toLowerCase();
+
+        if(settings == null)
+            return code;
 
         if(lang.equals("ru")){
             return settings.getRuValue();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="yel">
+        <createTable tableName="YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK">
+            <column name="TELEGRAM_TASK_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK"/>
+            </column>
+            <column name="TELEGRAM_USER_TASK_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="yel">
+        <addColumn tableName="YEL_TELEGRAM_TASK">
+            <column name="IS_TO_EVERYONE" type="BOOLEAN"/>
+            <column name="IS_TO_SEND_TO_NEW" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="3" author="yel">
+        <addForeignKeyConstraint baseColumnNames="TELEGRAM_TASK_ID"
+                                 baseTableName="YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK"
+                                 constraintName="FK_YELTELTASTELUSETAS_ON_TELEGRAM_TASK" referencedColumnNames="ID"
+                                 referencedTableName="YEL_TELEGRAM_TASK"/>
+    </changeSet>
+    <changeSet id="4" author="yel">
+        <addForeignKeyConstraint baseColumnNames="TELEGRAM_USER_TASK_ID"
+                                 baseTableName="YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK"
+                                 constraintName="FK_YELTELTASTELUSETAS_ON_TELEGRAM_USER_TASK" referencedColumnNames="ID"
+                                 referencedTableName="YEL_TELEGRAM_USER_TASK"/>
+    </changeSet>
+</databaseChangeLog>

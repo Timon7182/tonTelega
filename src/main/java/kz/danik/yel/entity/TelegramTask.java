@@ -8,6 +8,7 @@ import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
@@ -50,6 +51,42 @@ public class TelegramTask {
     @Column(name = "IS_ACTIVE", nullable = false)
     @NotNull
     private Boolean isActive = false;
+
+    @JoinTable(name = "YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK",
+            joinColumns = @JoinColumn(name = "TELEGRAM_TASK_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "TELEGRAM_USER_TASK_ID", referencedColumnName = "ID"))
+    @ManyToMany
+    private List<TelegramUserTask> userTasks;
+
+    @Column(name = "IS_TO_EVERYONE")
+    private Boolean isToEveryone = false;
+
+    @Column(name = "IS_TO_SEND_TO_NEW")
+    private Boolean isToSendToNew = false;
+
+    public Boolean getIsToSendToNew() {
+        return isToSendToNew;
+    }
+
+    public void setIsToSendToNew(Boolean isToSendToNew) {
+        this.isToSendToNew = isToSendToNew;
+    }
+
+    public Boolean getIsToEveryone() {
+        return isToEveryone;
+    }
+
+    public void setIsToEveryone(Boolean isToEveryone) {
+        this.isToEveryone = isToEveryone;
+    }
+
+    public List<TelegramUserTask> getUserTasks() {
+        return userTasks;
+    }
+
+    public void setUserTasks(List<TelegramUserTask> userTasks) {
+        this.userTasks = userTasks;
+    }
 
     public String getTaskNameEn() {
         return taskNameEn;

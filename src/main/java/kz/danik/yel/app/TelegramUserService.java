@@ -58,13 +58,16 @@ public class TelegramUserService {
             List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks();
             List<TelegramUserTask> telegramUserTasks = new ArrayList<>();
             for (TelegramTask task : tasks) {
-                TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
-                telegramUserTask.setUser(telegramUser);
-                telegramUserTask.setTask(task);
-                telegramUserTask.setStatus(TaskStatus.IN_PROGRESS);
-                telegramUserTask.setToNotify(false);
-                saveContext.saving(telegramUserTask);
-                telegramUserTasks.add(telegramUserTask);
+                if((task.getIsToEveryone() != null &&  task.getIsToEveryone().equals(Boolean.TRUE))
+                        || (task.getIsToSendToNew() != null && task.getIsToSendToNew().equals(Boolean.TRUE))){
+                    TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
+                    telegramUserTask.setUser(telegramUser);
+                    telegramUserTask.setTask(task);
+                    telegramUserTask.setStatus(TaskStatus.IN_PROGRESS);
+                    telegramUserTask.setToNotify(false);
+                    saveContext.saving(telegramUserTask);
+                    telegramUserTasks.add(telegramUserTask);
+                }
             }
 
             telegramUser.setTasks(telegramUserTasks);

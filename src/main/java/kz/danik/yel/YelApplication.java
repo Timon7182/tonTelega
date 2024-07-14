@@ -46,6 +46,7 @@ public class YelApplication implements AppShellConfigurator {
     public CommandLineRunner init() {
         return args -> {
             String botToken = "7390627968:AAHhrjWDt2Itr7af6JegVfZF2gtxdVFUILE";
+//            String botToken = "7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8";
 
             // Using try-with-resources to allow autoclose to run upon finishing
             try (TelegramBotsLongPollingApplication botsApplication = new TelegramBotsLongPollingApplication()) {

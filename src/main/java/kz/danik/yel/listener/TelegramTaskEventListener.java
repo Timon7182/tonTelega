@@ -21,28 +21,28 @@ public class TelegramTaskEventListener {
 
     @TransactionalEventListener
     public void onTelegramTaskChangedAfterCommit(final EntityChangedEvent<TelegramTask> event) {
-        if (!event.getType().equals(EntityChangedEvent.Type.CREATED))
-            return;
-
-        List<TelegramUser> telegramUserList =  dataManager.load(TelegramUser.class)
-                .all()
-                .joinTransaction(false)
-                .list();
-
-        TelegramTask task = dataManager.load(TelegramTask.class)
-                .id(event.getEntityId().getValue())
-                .joinTransaction(false)
-                .fetchPlan(FetchPlan.LOCAL)
-                .one();
-
-        for (TelegramUser telegramUser : telegramUserList) {
-            TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
-            telegramUserTask.setUser(telegramUser);
-            telegramUserTask.setTask(task);
-            dataManager.save(new SaveContext()
-                            .saving(telegramUserTask)
-                            .setJoinTransaction(false));
-        }
+//        if (!event.getType().equals(EntityChangedEvent.Type.CREATED))
+//            return;
+//
+//        List<TelegramUser> telegramUserList =  dataManager.load(TelegramUser.class)
+//                .all()
+//                .joinTransaction(false)
+//                .list();
+//
+//        TelegramTask task = dataManager.load(TelegramTask.class)
+//                .id(event.getEntityId().getValue())
+//                .joinTransaction(false)
+//                .fetchPlan(FetchPlan.LOCAL)
+//                .one();
+//
+//        for (TelegramUser telegramUser : telegramUserList) {
+//            TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
+//            telegramUserTask.setUser(telegramUser);
+//            telegramUserTask.setTask(task);
+//            dataManager.save(new SaveContext()
+//                            .saving(telegramUserTask)
+//                            .setJoinTransaction(false));
+//        }
 
     }
 }

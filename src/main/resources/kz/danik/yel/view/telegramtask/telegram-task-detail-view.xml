@@ -5,8 +5,11 @@
     <data>
         <instance id="telegramTaskDc"
                   class="kz.danik.yel.entity.TelegramTask">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="userTasks" fetchPlan="_base"/>
+            </fetchPlan>
             <loader/>
+            <collection id="userTasksDc" property="userTasks"/>
         </instance>
     </data>
     <facets>
@@ -26,7 +29,22 @@
             <textField id="prizeField" property="prize"/>
             <textField id="currencyField" property="currency"/>
             <checkbox id="isActiveField" property="isActive"/>
+            <checkbox id="isToEveryoneField" property="isToEveryone"/>
+            <checkbox id="isToSendToNewField" property="isToSendToNew"/>
         </formLayout>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button action="userTasksDataGrid.create"/>
+            <button action="userTasksDataGrid.exclude"/>
+        </hbox>
+        <dataGrid id="userTasksDataGrid" dataContainer="userTasksDc" width="100%" height="100%">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="exclude" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="user"/>
+            </columns>
+        </dataGrid>
         <hbox id="detailActions">
             <button id="saveAndCloseBtn" action="saveAction"/>
             <button id="closeBtn" action="closeAction"/>

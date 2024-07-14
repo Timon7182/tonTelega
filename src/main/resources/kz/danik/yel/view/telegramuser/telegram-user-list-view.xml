@@ -9,7 +9,7 @@
             <fetchPlan extends="_base"/>
             <loader id="telegramUsersDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from yel_TelegramUser e]]>
+                    <![CDATA[select e from yel_TelegramUser e where e.id not in :idsToExclude]]>
                 </query>
             </loader>
         </collection>
