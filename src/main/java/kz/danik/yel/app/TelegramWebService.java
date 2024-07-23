@@ -34,12 +34,13 @@ public class TelegramWebService {
                                  String chat_type,
                                  String auth_date,
                                  String hash){
-        try{
+        try {
             telegramAuth.authenticate(user,chat_instance,chat_type, auth_date, hash);
-            return new BigDecimal(30000);
-        }catch (Exception exception){
-            return new BigDecimal(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
+        return new BigDecimal(30000);
 
     }
 
