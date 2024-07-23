@@ -3,6 +3,10 @@
     <service name="yel_TelegramWebService">
         <method name="getActiveTelegramTasks" httpMethod="GET"/>
         <method name="getBalance" httpMethod="GET">
+            <param name="user" type="java.lang.String" required="true"/>
+            <param name="chat_instance" type="java.lang.String" required="true"/>
+            <param name="chat_type" type="java.lang.String" required="true"/>
+            <param name="auth_date" type="java.lang.String" required="true"/>
             <param name="hash" type="java.lang.String" required="true"/>
         </method>
     </service>
