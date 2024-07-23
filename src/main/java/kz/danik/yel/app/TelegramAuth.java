@@ -45,7 +45,7 @@ public class TelegramAuth {
         log.error("hash " + hash);
         // Step 4: Compare the generated hash with the received hash
         if (!generatedHash.equals(hash))
-            throw new Exception("Invalid data");
+            throw new Exception(String.format("Invalid data, secretKey: %s, generatedHash: %s", secretKey, generatedHash));
     }
 
     private String hmacSha256(String data, String key) throws Exception {
