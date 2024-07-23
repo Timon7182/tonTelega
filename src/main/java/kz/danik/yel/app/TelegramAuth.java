@@ -28,7 +28,7 @@ public class TelegramAuth {
         params.put("chat_instance", chat_instance);
         params.put("chat_type", chat_type);
         params.put("auth_date", auth_date);
-        params.put("hash", hash);
+
 
         StringBuilder dataCheckString = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
