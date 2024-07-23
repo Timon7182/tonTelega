@@ -14,8 +14,13 @@ import java.util.List;
 @Service("yel_TelegramWebService")
 public class TelegramWebService {
 
+    private final TelegramAuth telegramAuth;
     @Autowired
     private DataManager dataManager;
+
+    public TelegramWebService(TelegramAuth telegramAuth) {
+        this.telegramAuth = telegramAuth;
+    }
 
     public List<TelegramTask> getActiveTelegramTasks(String hash){
         return dataManager.load(TelegramTask.class)
@@ -24,8 +29,18 @@ public class TelegramWebService {
                 .list();
     }
 
-    public BigDecimal getBalance(String hash){
-        return new BigDecimal(30000);
+    public BigDecimal getBalance(String user,
+                                 String chat_instance,
+                                 String chat_type,
+                                 String auth_date,
+                                 String hash){
+        try{
+            telegramAuth.authenticate(user,chat_instance,chat_type, auth_date, hash);
+            return new BigDecimal(30000);
+        }catch (Exception exception){
+            return new BigDecimal(0);
+        }
+
     }
 
 }
