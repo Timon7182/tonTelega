@@ -5,11 +5,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("yel_TelegramAuth")
 public class TelegramAuth {
 
+
+    private static final Logger log = LoggerFactory.getLogger(TelegramAuth.class);
 
     public void authenticate(String user,
                              String chat_instance,
@@ -31,11 +35,14 @@ public class TelegramAuth {
         dataCheckString.setLength(dataCheckString.length() - 1);
 
         // Step 2: Generate the secret key using HMAC-SHA-256 with "WebAppData" as the key
-        String secretKey = hmacSha256("7390627968:AAHhrjWDt2Itr7af6JegVfZF2gtxdVFUILE", "WebAppData");
+        String secretKey = hmacSha256("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8", "WebAppData");
 
         // Step 3: Generate the hash from the data-check-string and secret key
         String generatedHash = hmacSha256(dataCheckString.toString(), secretKey);
 
+        log.error("secretKey: " + secretKey);
+        log.error("generatedHash: " + generatedHash);
+        log.error("hash " + hash);
         // Step 4: Compare the generated hash with the received hash
         if (!generatedHash.equals(hash))
             throw new Exception("Invalid data");
