@@ -27,5 +27,6 @@ public class DatabaseUserRepository extends AbstractDatabaseUserRepository<User>
 
     @Override
     protected void initAnonymousUser(final User anonymousUser) {
+
     }
 }

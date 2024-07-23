@@ -114,6 +114,8 @@ dependencies {
     }
     testImplementation 'io.jmix.flowui:jmix-flowui-test-assist'
     implementation 'org.postgresql:postgresql'
+    implementation 'io.jmix.authserver:jmix-authserver-starter'
+    implementation 'io.jmix.rest:jmix-rest-starter'
 }
 
 test {
