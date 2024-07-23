@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
 
+import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.apache.commons.codec.digest.HmacUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -35,18 +37,16 @@ public class TelegramAuth {
         // Remove the trailing newline character
         dataCheckString.setLength(dataCheckString.length() - 1);
 
-        // Step 2: Generate the secret key using HMAC-SHA-256 with "WebAppData" as the key
-        String secretKey = hmacSha256("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8", "WebAppData");
+        String botTokenData = "WebAppData";
+        byte[] hmacSecret = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, botTokenData)
+                .hmac("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8");
 
-        // Step 3: Generate the hash from the data-check-string and secret key
-        String generatedHash = hmacSha256(dataCheckString.toString(), secretKey);
+        String calculatedHash = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, hmacSecret)
+                .hmacHex(dataCheckString.toString());
 
-        log.error("secretKey: " + secretKey);
-        log.error("generatedHash: " + generatedHash);
-        log.error("hash " + hash);
         // Step 4: Compare the generated hash with the received hash
-        if (!generatedHash.equals(hash))
-            throw new Exception(String.format("Invalid data, secretKey: %s, generatedHash: %s", secretKey, generatedHash));
+        if (!calculatedHash.equals(hash))
+            throw new Exception(String.format("Invalid data"));
     }
 
     private String hmacSha256(String data, String key) throws Exception {
