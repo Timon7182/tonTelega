@@ -6,12 +6,14 @@ import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.security.Authenticated;
 import kz.danik.yel.entity.*;
+import okhttp3.internal.concurrent.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service("yel_TelegramWebService")
 public class TelegramWebService {
@@ -28,7 +30,7 @@ public class TelegramWebService {
         this.settingsService = settingsService;
     }
 
-    public List<TelegramTask> getActiveTelegramTasks(String hash){
+    public List<TelegramTask> getActiveTelegramTasks(String hash) {
         return dataManager.load(TelegramTask.class)
                 .query("select e from yel_TelegramTask e")
                 .fetchPlan(FetchPlan.BASE)
@@ -36,12 +38,12 @@ public class TelegramWebService {
     }
 
     public TelegramDto getUserInfo(String user,
-                                  String chat_instance,
-                                  String chat_type,
-                                  String auth_date,
-                                  String hash){
+                                   String chat_instance,
+                                   String chat_type,
+                                   String auth_date,
+                                   String hash) {
         try {
-            telegramAuth.authenticate(user,chat_instance,chat_type, auth_date, hash);
+            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash);
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode userNode = objectMapper.readTree(user);
@@ -58,11 +60,8 @@ public class TelegramWebService {
 
             TelegramDto telegramDto = dataManager.create(TelegramDto.class);
             telegramDto.setId(telegramUser.getId());
-            telegramDto.setBalance(telegramUser.getBalance() != null ? telegramDto.getBalance() : 0);
-            telegramDto.setTasks(telegramUser.getTasks().stream()
-                    .filter(e->e.getStatus().equals(TaskStatus.IN_PROGRESS)
-                            || e.getPaymentStatus().equals(PaymentStatus.TO_PAY))
-                    .toList());
+            telegramDto.setBalance(telegramUser.getBalance() != null ? telegramUser.getBalance() : 0);
+            telegramDto.setTasks(telegramUser.getTasks());
 
             return telegramDto;
 
@@ -71,4 +70,35 @@ public class TelegramWebService {
         }
     }
 
+
+    public void accomplishTask(String user,
+                                      String chat_instance,
+                                      String chat_type,
+                                      String auth_date,
+                                      String hash,
+                                      UUID taskId) {
+        try {
+            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash);
+
+            TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
+                    .id(taskId)
+                    .fetchPlan(FetchPlan.BASE)
+                    .optional().orElse(null);
+
+            if(telegramUserTask == null || telegramUserTask.getStatus().equals(TaskStatus.DONE))
+                throw new Exception("Task not found");
+
+            TelegramUser telegramUser = telegramUserTask.getUser();
+            telegramUser.setBalance(telegramUser.getBalance() != null
+                    ? telegramUser.getBalance() + telegramUserTask.getTask().getPrize()
+                    : telegramUserTask.getTask().getPrize());
+            telegramUserTask.setStatus(TaskStatus.DONE);
+
+            dataManager.save(telegramUser);
+            dataManager.save(telegramUserTask);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
