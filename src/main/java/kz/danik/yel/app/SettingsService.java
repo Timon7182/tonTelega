@@ -7,6 +7,8 @@ import kz.danik.yel.entity.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component("yel_SettingsService")
 public class SettingsService {
 
@@ -20,5 +22,12 @@ public class SettingsService {
                 .parameter("code",code)
                 .fetchPlan(FetchPlan.LOCAL)
                 .optional().orElse(null);
+    }
+
+    List<Settings> getSettings(){
+        return dataManager.load(Settings.class)
+                .query("select e from yel_Settings e")
+                .fetchPlan(FetchPlan.LOCAL)
+                .list();
     }
 }

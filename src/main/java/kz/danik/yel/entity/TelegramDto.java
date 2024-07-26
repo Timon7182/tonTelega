@@ -1,0 +1,53 @@
+package kz.danik.yel.entity;
+
+import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.JmixId;
+import io.jmix.core.metamodel.annotation.JmixEntity;
+
+import java.util.List;
+import java.util.UUID;
+
+@JmixEntity(name = "yel_TelegramDto")
+public class TelegramDto {
+    @JmixGeneratedValue
+    @JmixId
+    private UUID id;
+
+    private List<Settings> settings;
+
+    private List<TelegramUserTask> tasks;
+
+    private Double balance;
+
+    public List<Settings> getSettings() {
+        return settings;
+    }
+
+    public void setSettings(List<Settings> settings) {
+        this.settings = settings;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public List<TelegramUserTask> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TelegramUserTask> tasks) {
+        this.tasks = tasks;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+}

@@ -26,6 +26,9 @@ public class TelegramUser {
     @Id
     private UUID id;
 
+    @Column(name = "BALANCE")
+    private Double balance;
+
     @Column(name = "IS_ADMIN", nullable = false)
     @NotNull
     private Boolean isAdmin = false;
@@ -84,6 +87,14 @@ public class TelegramUser {
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
     private OffsetDateTime lastModifiedDate;
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 
     public OffsetDateTime getLastModifiedDate() {
         return lastModifiedDate;

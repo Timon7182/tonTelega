@@ -80,6 +80,56 @@ public class TelegramUserService {
         return telegramUser;
     }
 
+
+
+    public TelegramUser getTelegramUserInfo(String userid,
+                                            String firstname,
+                                            String lastName,
+                                            String username,
+                                            long chatid) {
+
+        TelegramUser telegramUser = dataManager.load(TelegramUser.class)
+                .query("select e from yel_TelegramUser e where e.userid =:userId")
+                .parameter("userId", Long.parseLong(userid))
+                .fetchPlan("telegramUser-full-fetch-plan")
+                .optional().orElse(null);
+        if(telegramUser == null){
+
+            SaveContext saveContext = new SaveContext();
+
+            telegramUser = dataManager.create(TelegramUser.class);
+            telegramUser.setFirstName(firstname);
+            telegramUser.setLastName(lastName);
+            telegramUser.setUserid(BigInteger.valueOf(Long.parseLong(userid)));
+            telegramUser.setUsername(username);
+            telegramUser.setChatId(BigInteger.valueOf(Long.parseLong(userid)));
+            telegramUser.setState(0);
+
+            List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks();
+            List<TelegramUserTask> telegramUserTasks = new ArrayList<>();
+            for (TelegramTask task : tasks) {
+                if((task.getIsToEveryone() != null &&  task.getIsToEveryone().equals(Boolean.TRUE))
+                        || (task.getIsToSendToNew() != null && task.getIsToSendToNew().equals(Boolean.TRUE))){
+                    TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
+                    telegramUserTask.setUser(telegramUser);
+                    telegramUserTask.setTask(task);
+                    telegramUserTask.setStatus(TaskStatus.IN_PROGRESS);
+                    telegramUserTask.setToNotify(false);
+                    saveContext.saving(telegramUserTask);
+                    telegramUserTasks.add(telegramUserTask);
+                }
+            }
+
+            telegramUser.setTasks(telegramUserTasks);
+            saveContext.saving(telegramUser);
+
+
+            dataManager.save(saveContext);
+            return telegramUser;
+        }
+        return telegramUser;
+    }
+
     @Authenticated
     public void saveInstagramNickForUser(long userid,String username) {
 

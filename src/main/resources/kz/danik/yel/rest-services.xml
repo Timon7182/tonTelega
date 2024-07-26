@@ -2,7 +2,7 @@
 <services xmlns="http://jmix.io/schema/rest/services">
     <service name="yel_TelegramWebService">
         <method name="getActiveTelegramTasks" httpMethod="GET"/>
-        <method name="getBalance" httpMethod="GET">
+        <method name="getUserInfo" httpMethod="GET">
             <param name="user" type="java.lang.String" required="true"/>
             <param name="chat_instance" type="java.lang.String" required="true"/>
             <param name="chat_type" type="java.lang.String" required="true"/>
