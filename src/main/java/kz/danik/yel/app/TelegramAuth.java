@@ -29,11 +29,11 @@ public class TelegramAuth {
         Map<String, String> params = new TreeMap<>();
         params.put("user", user);
 
-        if(queryid != null && !queryid.isEmpty())
+        if(queryid != null && !queryid.isEmpty() && !queryid.equals("null"))
             params.put("query_id", queryid);
-        if(chat_instance != null && !chat_instance.isEmpty())
+        if(chat_instance != null && !chat_instance.isEmpty() && !chat_instance.equals("null"))
             params.put("chat_instance", chat_instance);
-        if(chat_type != null && !chat_type.isEmpty())
+        if(chat_type != null && !chat_type.isEmpty() && !chat_type.equals("null"))
             params.put("chat_type", chat_type);
 
         params.put("auth_date", auth_date);
