@@ -39,7 +39,7 @@ public class TelegramAuth {
 
         String botTokenData = "WebAppData";
         byte[] hmacSecret = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, botTokenData)
-                .hmac("7062923943:AAFwL-88vIo3Us_HK-64MGsMYmQl--Nbgr8");
+                .hmac("7390627968:AAHhrjWDt2Itr7af6JegVfZF2gtxdVFUILE");
 
         String calculatedHash = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, hmacSecret)
                 .hmacHex(dataCheckString.toString());
