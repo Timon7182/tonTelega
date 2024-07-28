@@ -21,12 +21,21 @@ public class TelegramAuth {
                              String chat_instance,
                              String chat_type,
                              String auth_date,
-                             String hash) throws Exception {
+                             String hash,
+                             String queryid) throws Exception {
+
+
 
         Map<String, String> params = new TreeMap<>();
         params.put("user", user);
-        params.put("chat_instance", chat_instance);
-        params.put("chat_type", chat_type);
+
+        if(queryid != null && !queryid.isEmpty())
+            params.put("query_id", queryid);
+        if(chat_instance != null && !chat_instance.isEmpty())
+            params.put("chat_instance", chat_instance);
+        if(chat_type != null && !chat_type.isEmpty())
+            params.put("chat_type", chat_type);
+
         params.put("auth_date", auth_date);
 
 

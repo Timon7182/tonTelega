@@ -41,9 +41,10 @@ public class TelegramWebService {
                                    String chat_instance,
                                    String chat_type,
                                    String auth_date,
-                                   String hash) {
+                                   String hash,
+                                   String query_id) {
         try {
-            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash);
+            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash,query_id);
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode userNode = objectMapper.readTree(user);
@@ -76,9 +77,10 @@ public class TelegramWebService {
                                       String chat_type,
                                       String auth_date,
                                       String hash,
-                                      UUID taskId) {
+                                      UUID taskId,
+                               String query_id) {
         try {
-            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash);
+            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash,query_id);
 
             TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
                     .id(taskId)

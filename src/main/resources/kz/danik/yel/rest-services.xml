@@ -8,6 +8,7 @@
             <param name="chat_type" type="java.lang.String" required="true"/>
             <param name="auth_date" type="java.lang.String" required="true"/>
             <param name="hash" type="java.lang.String" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
         </method>
         <method name="accomplishTask" httpMethod="GET">
             <param name="user" type="java.lang.String" required="true"/>
@@ -16,6 +17,7 @@
             <param name="auth_date" type="java.lang.String" required="true"/>
             <param name="hash" type="java.lang.String" required="true"/>
             <param name="taskId" type="java.util.UUID" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
         </method>
     </service>
 </services>
