@@ -52,6 +52,15 @@ public class TelegramWebService {
             String firstName = userNode.get("first_name").asText();
             String lastName = userNode.has("last_name") ? userNode.get("last_name").asText() : "";
             String username = userNode.get("username").asText();
+            Long chatId=null;
+            try{
+                if(chat_instance != null && !chat_instance.isEmpty() && !chat_instance.equals("null"))
+                    chatId = Long.valueOf(chatId);
+            }catch (Exception ez) {
+
+            }
+
+
 
             TelegramUser telegramUser = telegramUserService.getTelegramUserInfo(userId,
                     firstName,
