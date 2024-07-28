@@ -55,7 +55,7 @@ public class TelegramWebService {
             Long chatId=null;
             try{
                 if(chat_instance != null && !chat_instance.isEmpty() && !chat_instance.equals("null"))
-                    chatId = Long.valueOf(chatId);
+                    chatId = Long.valueOf(chat_instance);
             }catch (Exception ez) {
 
             }
@@ -66,7 +66,7 @@ public class TelegramWebService {
                     firstName,
                     lastName,
                     username,
-                    !chat_instance.isEmpty() ? Long.parseLong(chat_instance) : null);
+                    chatId);
 
             TelegramDto telegramDto = dataManager.create(TelegramDto.class);
             telegramDto.setId(telegramUser.getId());
