@@ -86,7 +86,7 @@ public class TelegramUserService {
                                             String firstname,
                                             String lastName,
                                             String username,
-                                            long chatid) {
+                                            Long chatid) {
 
         TelegramUser telegramUser = dataManager.load(TelegramUser.class)
                 .query("select e from yel_TelegramUser e where e.userid =:userId")
