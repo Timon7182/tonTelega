@@ -84,7 +84,7 @@ public class TelegramWebService {
                     .filter(e -> e.getTask().getIsActive().equals(Boolean.TRUE))
                     .filter(e -> {
                         Date now = new Date();
-                        return now.after(e.getDateTimeFrom()) && now.before(e.getDateTimeTo());
+                        return now.after(e.getTask().getDateTimeFrom()) && now.before(e.getTask().getDateTimeTo());
                     })
                     .collect(Collectors.toList());
 
