@@ -40,8 +40,6 @@ public class TelegramTaskEventListener {
             TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
             telegramUserTask.setUser(telegramUser);
             telegramUserTask.setTask(task);
-            telegramUserTask.setDateTimeFrom(task.getDateTimeFrom());
-            telegramUserTask.setDateTimeTo(task.getDateTimeTo());
             dataManager.save(new SaveContext()
                             .saving(telegramUserTask)
                             .setJoinTransaction(false));

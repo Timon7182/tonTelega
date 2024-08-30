@@ -82,7 +82,7 @@ public class TelegramUserService {
         return dataManager.load(TelegramUserTask.class)
                 .query("select e from yel_TelegramUserTask e where e.user = :user" +
                         " and e.task.isActive = true " +
-                        " and current_timestamp between e.dateTimeFrom and e.dateTimeTo")
+                        " and current_timestamp between e.task.dateTimeFrom and e.task.dateTimeTo")
                 .parameter("user",user)
                 .list();
     }
