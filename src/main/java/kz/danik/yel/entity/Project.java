@@ -18,6 +18,10 @@ public class Project {
     @Id
     private UUID id;
 
+    @Column(name = "ICON_LINK")
+    @Lob
+    private String iconLink;
+
     @Column(name = "STATUS")
     private String status;
 
@@ -43,6 +47,14 @@ public class Project {
     @JoinColumn(name = "USER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private TelegramUser user;
+
+    public String getIconLink() {
+        return iconLink;
+    }
+
+    public void setIconLink(String iconLink) {
+        this.iconLink = iconLink;
+    }
 
     public FileRef getIcon() {
         return icon;

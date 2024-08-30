@@ -22,7 +22,7 @@
         <formLayout id="form" dataContainer="projectDc">
             <select id="statusField" property="status"/>
             <textArea id="linkField" height="9.5em" property="link"/>
-            <textField id="iconField" property="icon"/>
+            <textArea id="iconLinkField" height="9.5em" property="iconLink"/>
             <textArea id="textFromRequestField" height="9.5em" property="textFromRequest"/>
             <textArea id="textRuField" height="9.5em" property="textRu"/>
             <textArea id="textEnField" height="9.5em" property="textEn"/>

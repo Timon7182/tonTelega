@@ -30,7 +30,7 @@ public class ProjectServiceBean {
                 .query("select e from yel_Project e where e.status = 'ACTIVE'")
                 .list();
         List<ProjectDto>  dtos = new ArrayList<>();
-        projects.forEach(e->dtos.add(new ProjectDto(e.getId(),getFilePath(e.getIcon()),e.getTextRu(),e.getLink())));
+        projects.forEach(e->dtos.add(new ProjectDto(e.getId(),e.getIconLink(),e.getTextRu(),e.getLink())));
         return dtos;
     }
 
