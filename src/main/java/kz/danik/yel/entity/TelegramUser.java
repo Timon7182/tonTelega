@@ -26,6 +26,9 @@ public class TelegramUser {
     @Id
     private UUID id;
 
+    @Column(name = "LEVEL_")
+    private String level;
+
     @Column(name = "BALANCE")
     private Double balance;
 
@@ -87,6 +90,14 @@ public class TelegramUser {
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
     private OffsetDateTime lastModifiedDate;
+
+    public Level getLevel() {
+        return level == null ? null : Level.fromId(level);
+    }
+
+    public void setLevel(Level level) {
+        this.level = level == null ? null : level.getId();
+    }
 
     public Double getBalance() {
         return balance;

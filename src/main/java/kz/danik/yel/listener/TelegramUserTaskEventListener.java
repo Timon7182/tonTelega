@@ -26,38 +26,26 @@ public class TelegramUserTaskEventListener {
 
     @TransactionalEventListener
     public void onTelegramUserTaskChangedAfterCommit(final EntityChangedEvent<TelegramUserTask> event) throws TelegramApiException {
-        if(event.getType().equals(EntityChangedEvent.Type.UPDATED) && event.getChanges().isChanged("paymentStatus")){
-            TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
-                    .id(event.getEntityId().getValue())
-                    .joinTransaction(false)
-                    .fetchPlan("telegramUserTask-withTask-fetch-plan")
-                    .one();
-
-            if(telegramUserTask.getPaymentStatus() != null && telegramUserTask.getPaymentStatus().equals(PaymentStatus.TO_PAY)){
-                sendNotificationToAdminsToPay(telegramUserTask);
-            }
-        }
-
-        if(event.getType().equals(EntityChangedEvent.Type.CREATED)){
-
-            TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
-                    .id(event.getEntityId().getValue())
-                    .joinTransaction(false)
-                    .fetchPlan("telegramUserTask-withTask-fetch-plan")
-                    .one();
-            try {
-                if(telegramUserTask.getTask().getIsActive().equals(Boolean.FALSE)
-                        || telegramUserTask.getToNotify().equals(Boolean.FALSE))
-                    return;
-
-                TonBot.sendMessageToChat(String.valueOf(telegramUserTask.getUser().getChatId().longValue()),
-                        "У вас появилась новая задача :D");
-            } catch (TelegramApiException e) {
-                log.error(String.format("%s, %s", ExceptionUtils.getMessage(e),
-                        ExceptionUtils.getStackTrace(e)));
-                throw new RuntimeException(e);
-            }
-        }
+//        if(event.getType().equals(EntityChangedEvent.Type.CREATED)){
+//
+//            TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
+//                    .id(event.getEntityId().getValue())
+//                    .joinTransaction(false)
+//                    .fetchPlan("telegramUserTask-withTask-fetch-plan")
+//                    .one();
+//            try {
+//                if(telegramUserTask.getTask().getIsActive().equals(Boolean.FALSE)
+//                        || telegramUserTask.getToNotify().equals(Boolean.FALSE))
+//                    return;
+//
+//                TonBot.sendMessageToChat(String.valueOf(telegramUserTask.getUser().getChatId().longValue()),
+//                        "У вас появилась новая задача :D");
+//            } catch (TelegramApiException e) {
+//                log.error(String.format("%s, %s", ExceptionUtils.getMessage(e),
+//                        ExceptionUtils.getStackTrace(e)));
+//                throw new RuntimeException(e);
+//            }
+//        }
     }
 
     protected void sendNotificationToAdminsToPay(TelegramUserTask telegramUserTask) throws TelegramApiException {

@@ -17,7 +17,25 @@ public class TelegramDto {
 
     private List<TelegramUserTask> tasks;
 
+    private Long taskCount;
+    private String level;
     private Double balance;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public Long getTaskCount() {
+        return taskCount;
+    }
+
+    public void setTaskCount(Long taskCount) {
+        this.taskCount = taskCount;
+    }
 
     public List<Settings> getSettings() {
         return settings;

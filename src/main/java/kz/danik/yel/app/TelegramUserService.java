@@ -4,10 +4,7 @@ import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.SaveContext;
 import io.jmix.core.security.Authenticated;
-import kz.danik.yel.entity.TaskStatus;
-import kz.danik.yel.entity.TelegramTask;
-import kz.danik.yel.entity.TelegramUser;
-import kz.danik.yel.entity.TelegramUserTask;
+import kz.danik.yel.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -55,7 +52,7 @@ public class TelegramUserService {
             telegramUser.setChatId(BigInteger.valueOf(chatid));
             telegramUser.setState(0);
 
-            List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks();
+            List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks(Level.BRONZE);
             List<TelegramUserTask> telegramUserTasks = new ArrayList<>();
             for (TelegramTask task : tasks) {
                 if((task.getIsToEveryone() != null &&  task.getIsToEveryone().equals(Boolean.TRUE))
@@ -104,8 +101,9 @@ public class TelegramUserService {
             telegramUser.setUsername(username);
             telegramUser.setChatId(BigInteger.valueOf(Long.parseLong(userid)));
             telegramUser.setState(0);
+            telegramUser.setLevel(Level.BRONZE);
 
-            List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks();
+            List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks(Level.BRONZE);
             List<TelegramUserTask> telegramUserTasks = new ArrayList<>();
             for (TelegramTask task : tasks) {
                 if((task.getIsToEveryone() != null &&  task.getIsToEveryone().equals(Boolean.TRUE))

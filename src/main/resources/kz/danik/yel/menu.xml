@@ -7,6 +7,9 @@
         <item view="yel_TelegramUserTask.list"
               title="msg://kz.danik.yel.view.telegramusertask/telegramUserTaskListView.title"/>
         <item view="yel_Settings.list" title="msg://kz.danik.yel.view.settings/settingsListView.title"/>
+        <item view="yel_Project.list" title="msg://kz.danik.yel.view.project/projectListView.title"/>
+        <item view="yel_PaymentRequest.list"
+              title="msg://kz.danik.yel.view.paymentrequest/paymentRequestListView.title"/>
     </menu>
 
 </menu-config>

@@ -3,10 +3,7 @@ package kz.danik.yel.app;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.security.Authenticated;
-import kz.danik.yel.entity.PaymentStatus;
-import kz.danik.yel.entity.TaskStatus;
-import kz.danik.yel.entity.TelegramTask;
-import kz.danik.yel.entity.TelegramUserTask;
+import kz.danik.yel.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +18,12 @@ public class TelegramTaskService {
     private DataManager dataManager;
 
     @Authenticated
-    List<TelegramTask> getActiveTelegramTasks(){
+    List<TelegramTask> getActiveTelegramTasks(Level level){
        return dataManager.load(TelegramTask.class)
-                .query("select e from yel_TelegramTask e")
-               .fetchPlan(FetchPlan.BASE)
-               .list();
+                .query("select e from yel_TelegramTask e where e.level = :level ")
+                .parameter("level", level.getId())
+                .fetchPlan(FetchPlan.BASE)
+                .list();
     }
 
     @Authenticated

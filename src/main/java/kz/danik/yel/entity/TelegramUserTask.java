@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @JmixEntity
@@ -23,6 +24,14 @@ public class TelegramUserTask {
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @Column(name = "DATE_TIME_FROM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTimeFrom;
+
+    @Column(name = "DATE_TIME_TO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTimeTo;
 
     @Column(name = "TO_NOTIFY")
     private Boolean toNotify = true;
@@ -59,6 +68,22 @@ public class TelegramUserTask {
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
     private OffsetDateTime lastModifiedDate;
+
+    public Date getDateTimeTo() {
+        return dateTimeTo;
+    }
+
+    public void setDateTimeTo(Date dateTimeTo) {
+        this.dateTimeTo = dateTimeTo;
+    }
+
+    public Date getDateTimeFrom() {
+        return dateTimeFrom;
+    }
+
+    public void setDateTimeFrom(Date dateTimeFrom) {
+        this.dateTimeFrom = dateTimeFrom;
+    }
 
     public OffsetDateTime getLastModifiedDate() {
         return lastModifiedDate;

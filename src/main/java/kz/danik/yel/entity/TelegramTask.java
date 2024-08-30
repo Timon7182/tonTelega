@@ -8,6 +8,7 @@ import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,9 @@ public class TelegramTask {
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @Column(name = "LEVEL_")
+    private String level;
 
     @Column(name = "TASK_URL")
     @Lob
@@ -44,13 +48,12 @@ public class TelegramTask {
     @NotNull
     private Double prize;
 
-    @Column(name = "CURRENCY", nullable = false)
-    @NotNull
+    @Column(name = "CURRENCY")
     private String currency;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     @NotNull
-    private Boolean isActive = false;
+    private Boolean isActive = true;
 
     @JoinTable(name = "YEL_TELEGRAM_TASK_TELEGRAM_USER_TASK_LINK",
             joinColumns = @JoinColumn(name = "TELEGRAM_TASK_ID", referencedColumnName = "ID"),
@@ -63,6 +66,38 @@ public class TelegramTask {
 
     @Column(name = "IS_TO_SEND_TO_NEW")
     private Boolean isToSendToNew = false;
+
+    @Column(name = "DATE_TIME_FROM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTimeFrom;
+
+    @Column(name = "DATE_TIME_TO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTimeTo;
+
+    public Date getDateTimeTo() {
+        return dateTimeTo;
+    }
+
+    public void setDateTimeTo(Date dateTimeTo) {
+        this.dateTimeTo = dateTimeTo;
+    }
+
+    public Date getDateTimeFrom() {
+        return dateTimeFrom;
+    }
+
+    public void setDateTimeFrom(Date dateTimeFrom) {
+        this.dateTimeFrom = dateTimeFrom;
+    }
+
+    public Level getLevel() {
+        return level == null ? null : Level.fromId(level);
+    }
+
+    public void setLevel(Level level) {
+        this.level = level == null ? null : level.getId();
+    }
 
     public Boolean getIsToSendToNew() {
         return isToSendToNew;
