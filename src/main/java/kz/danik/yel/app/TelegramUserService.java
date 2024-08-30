@@ -83,6 +83,7 @@ public class TelegramUserService {
                 .query("select e from yel_TelegramUserTask e where e.user = :user" +
                         " and e.task.isActive = true " +
                         " and current_timestamp between e.task.dateTimeFrom and e.task.dateTimeTo")
+                .fetchPlan("telegramUserTask-taskList-fetch-plan")
                 .parameter("user",user)
                 .list();
     }

@@ -12,4 +12,7 @@
             <property name="chatId"/>
         </property>
     </fetchPlan>
+    <fetchPlan entity="yel_TelegramUserTask" name="telegramUserTask-taskList-fetch-plan" extends="_base">
+        <property name="task" fetchPlan="_base"/>
+    </fetchPlan>
 </fetchPlans>
