@@ -19,7 +19,7 @@
             <param name="taskId" type="java.util.UUID" required="true"/>
             <param name="query_id" type="java.lang.String" required="true"/>
         </method>
-        <method name="createProject" httpMethod="POST">
+        <method name="createProject" httpMethod="GET">
             <param name="user" type="java.lang.String" required="true"/>
             <param name="chat_instance" type="java.lang.String" required="true"/>
             <param name="chat_type" type="java.lang.String" required="true"/>
@@ -39,7 +39,7 @@
             <param name="query_id" type="java.lang.String" required="true"/>
         </method>
 
-        <method name="createPaymentRequest" httpMethod="POST">
+        <method name="createPaymentRequest" httpMethod="GET">
             <param name="user" type="java.lang.String" required="true"/>
             <param name="chat_instance" type="java.lang.String" required="true"/>
             <param name="chat_type" type="java.lang.String" required="true"/>
