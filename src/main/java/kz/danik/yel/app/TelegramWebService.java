@@ -1,5 +1,6 @@
 package kz.danik.yel.app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jmix.core.DataManager;
@@ -7,6 +8,7 @@ import io.jmix.core.FetchPlan;
 import io.jmix.core.security.Authenticated;
 import kz.danik.yel.entity.*;
 import okhttp3.internal.concurrent.Task;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -151,7 +153,6 @@ public class TelegramWebService {
             TelegramUser telegramUser = dataManager.load(TelegramUser.class)
                     .query("select e from yel_TelegramUser e where e.userid =:userId")
                     .parameter("userId", Long.parseLong(userId))
-                    .fetchPlan("telegramUser-full-fetch-plan")
                     .optional().orElse(null);
 
             projectServiceBean.createProject(telegramUser, link, text);
@@ -186,18 +187,37 @@ public class TelegramWebService {
         try {
             telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash, query_id);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode userNode = objectMapper.readTree(user);
-            String userId = userNode.get("id").asText();
-
-            TelegramUser telegramUser = dataManager.load(TelegramUser.class)
-                    .query("select e from yel_TelegramUser e where e.userid =:userId")
-                    .parameter("userId", Long.parseLong(userId))
-                            .fetchPlan("telegramUser-full-fetch-plan")
-                    .optional().orElse(null);
+            TelegramUser telegramUser = getTelegramUser(user);
 
             paymentRequestServiceBean.createPaymentRequest(telegramUser, sum);
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private @Nullable TelegramUser getTelegramUser(String user) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode userNode = objectMapper.readTree(user);
+        String userId = userNode.get("id").asText();
+
+        TelegramUser telegramUser = dataManager.load(TelegramUser.class)
+                .query("select e from yel_TelegramUser e where e.userid =:userId")
+                .parameter("userId", Long.parseLong(userId))
+                        .fetchPlan("telegramUser-full-fetch-plan")
+                .optional().orElse(null);
+        return telegramUser;
+    }
+
+    public List<TelegramUserTask> getTasks(String user,
+                                       String chat_instance,
+                                       String chat_type,
+                                       String auth_date,
+                                       String hash,
+                                       String query_id){
+        try {
+            telegramAuth.authenticate(user, chat_instance, chat_type, auth_date, hash, query_id);
+            return telegramUserService.getUserTasks(getTelegramUser(user));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -4,6 +4,7 @@
             <property name="task" fetchPlan="_base"/>
         </property>
     </fetchPlan>
+    <fetchPlan entity="yel_TelegramUser" name="telegramUser-info-fetch-plan" extends="_base"/>
     <fetchPlan entity="yel_TelegramUserTask" name="telegramUserTask-withTask-fetch-plan" extends="_base">
         <property name="task" fetchPlan="_base"/>
         <property name="user" fetchPlan="_base">

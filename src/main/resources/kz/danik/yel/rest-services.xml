@@ -19,5 +19,43 @@
             <param name="taskId" type="java.util.UUID" required="true"/>
             <param name="query_id" type="java.lang.String" required="true"/>
         </method>
+        <method name="createProject" httpMethod="POST">
+            <param name="user" type="java.lang.String" required="true"/>
+            <param name="chat_instance" type="java.lang.String" required="true"/>
+            <param name="chat_type" type="java.lang.String" required="true"/>
+            <param name="auth_date" type="java.lang.String" required="true"/>
+            <param name="hash" type="java.lang.String" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
+            <param name="text" type="java.lang.String" required="true"/>
+            <param name="link" type="java.lang.String" required="true"/>
+        </method>
+
+        <method name="getProjects" httpMethod="GET">
+            <param name="user" type="java.lang.String" required="true"/>
+            <param name="chat_instance" type="java.lang.String" required="true"/>
+            <param name="chat_type" type="java.lang.String" required="true"/>
+            <param name="auth_date" type="java.lang.String" required="true"/>
+            <param name="hash" type="java.lang.String" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
+        </method>
+
+        <method name="createPaymentRequest" httpMethod="POST">
+            <param name="user" type="java.lang.String" required="true"/>
+            <param name="chat_instance" type="java.lang.String" required="true"/>
+            <param name="chat_type" type="java.lang.String" required="true"/>
+            <param name="auth_date" type="java.lang.String" required="true"/>
+            <param name="hash" type="java.lang.String" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
+            <param name="sum" type="java.lang.Double" required="true"/>
+        </method>
+
+        <method name="getTasks" httpMethod="GET">
+            <param name="user" type="java.lang.String" required="true"/>
+            <param name="chat_instance" type="java.lang.String" required="true"/>
+            <param name="chat_type" type="java.lang.String" required="true"/>
+            <param name="auth_date" type="java.lang.String" required="true"/>
+            <param name="hash" type="java.lang.String" required="true"/>
+            <param name="query_id" type="java.lang.String" required="true"/>
+        </method>
     </service>
 </services>

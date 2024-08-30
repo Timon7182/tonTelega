@@ -78,6 +78,15 @@ public class TelegramUserService {
     }
 
 
+    public List<TelegramUserTask> getUserTasks(TelegramUser user){
+        return dataManager.load(TelegramUserTask.class)
+                .query("select e from yel_TelegramUserTask e where e.user = :user" +
+                        " and e.task.isActive = true " +
+                        " and current_timestamp between e.dateTimeFrom and e.dateTimeTo")
+                .parameter("user",user)
+                .list();
+    }
+
 
     public TelegramUser getTelegramUserInfo(String userid,
                                             String firstname,
@@ -88,8 +97,9 @@ public class TelegramUserService {
         TelegramUser telegramUser = dataManager.load(TelegramUser.class)
                 .query("select e from yel_TelegramUser e where e.userid =:userId")
                 .parameter("userId", Long.parseLong(userid))
-                .fetchPlan("telegramUser-full-fetch-plan")
+                .fetchPlan("telegramUser-info-fetch-plan")
                 .optional().orElse(null);
+
         if(telegramUser == null){
 
             SaveContext saveContext = new SaveContext();
