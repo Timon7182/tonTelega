@@ -22,6 +22,7 @@ public class ProjectServiceBean {
         Project project = dataManager.create(Project.class);
         project.setStatus(ProjectStatus.NEW_REQUEST);
         project.setLink(link);
+        project.setUser(telegramUser);
         project.setTextFromRequest(text);
         dataManager.save(project);
     }
