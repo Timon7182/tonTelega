@@ -117,8 +117,6 @@ public class TelegramUserService {
             List<TelegramTask> tasks = telegramTaskService.getActiveTelegramTasks(Level.BRONZE);
             List<TelegramUserTask> telegramUserTasks = new ArrayList<>();
             for (TelegramTask task : tasks) {
-                if((task.getIsToEveryone() != null &&  task.getIsToEveryone().equals(Boolean.TRUE))
-                        || (task.getIsToSendToNew() != null && task.getIsToSendToNew().equals(Boolean.TRUE))){
                     TelegramUserTask telegramUserTask = dataManager.create(TelegramUserTask.class);
                     telegramUserTask.setUser(telegramUser);
                     telegramUserTask.setTask(task);
@@ -126,7 +124,6 @@ public class TelegramUserService {
                     telegramUserTask.setToNotify(false);
                     saveContext.saving(telegramUserTask);
                     telegramUserTasks.add(telegramUserTask);
-                }
             }
 
             telegramUser.setTasks(telegramUserTasks);
