@@ -110,14 +110,14 @@ public class TelegramWebService {
 
             TelegramUserTask telegramUserTask = dataManager.load(TelegramUserTask.class)
                     .id(taskId)
-                    .fetchPlan(FetchPlan.BASE)
+                    .fetchPlan("telegramUserTask-accomplish-fetch-plan")
                     .optional().orElse(null);
 
             if (telegramUserTask == null
                     || telegramUserTask.getStatus().equals(TaskStatus.DONE)
                     || telegramUserTask.getTask().getIsActive().equals(Boolean.FALSE)
-                    || new Date().before(telegramUserTask.getDateTimeFrom())
-                    || new Date().after(telegramUserTask.getDateTimeTo())) {
+                    || new Date().before(telegramUserTask.getTask().getDateTimeFrom())
+                    || new Date().after(telegramUserTask.getTask().getDateTimeTo())) {
                 throw new Exception("Task not found");
             }
 
